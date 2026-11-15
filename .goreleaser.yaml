@@ -25,7 +25,7 @@ builds:
       - amd64
       - arm64
     ldflags:
-      - -s -w -X github.com/ygelfand/echolocal/internal/layout.Version={{.Version}} -X github.com/ygelfand/echolocal/internal/layout.GitCommit={{.Commit}} -X github.com/ygelfand/echolocal/internal/layout.BuildDate={{.Date}}
+      - -s -w -X github.com/ygelfand/echolocal/internal/layout.Version={{.Version}} -X github.com/ygelfand/echolocal/internal/layout.GitCommit={{.Commit}} -X github.com/ygelfand/echolocal/internal/layout.BuildDate={{.Date}} -X github.com/ygelfand/echolocal/internal/update.repo=https://github.com/{{ envOrDefault "REPO" "ygelfand/echolocal" }}
 
 archives:
   - formats: ["binary"]

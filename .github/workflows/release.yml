@@ -9,6 +9,8 @@ permissions:
 
 env:
   GOWORK: "off"
+  # A fork's release names the fork, so its devices update from it.
+  REPO: ${{ github.repository }}
   COUNTERTOP_FILES_URL: ${{ secrets.COUNTERTOP_FILES_URL }}
 
 jobs:

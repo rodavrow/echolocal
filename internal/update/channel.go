@@ -15,7 +15,8 @@ const (
 	Dev
 )
 
-const repo = "https://github.com/ygelfand/echolocal"
+// A build names its own repository with -X, so a fork's devices follow the fork's releases.
+var repo = "https://github.com/ygelfand/echolocal"
 
 func (c Channel) Label() string {
 	switch c {
