@@ -122,7 +122,7 @@ export default defineConfig({
 							"slug": "features/apps"
 						},
 						{
-							"label": "Local video",
+							"label": "Video",
 							"slug": "features/video"
 						},
 						{
