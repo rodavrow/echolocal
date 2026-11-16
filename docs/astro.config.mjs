@@ -122,6 +122,10 @@ export default defineConfig({
 							"slug": "features/apps"
 						},
 						{
+							"label": "Local video",
+							"slug": "features/video"
+						},
+						{
 							"label": "Photos and wallpaper",
 							"slug": "features/photos"
 						},
