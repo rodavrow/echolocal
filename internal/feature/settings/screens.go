@@ -92,18 +92,19 @@ func uiSize() string {
 func networkPage() *sharedshell.Page {
 	return sharedsettings.NetworkPage(func() sharedsettings.NetworkState {
 		c := sharedsettings.NetworkState{
-			SSID:    wifi.Get().Network(),
-			Address: address(),
-			MAC:     wifi.Get().MAC(),
-			Verify:  config.Get().Network.Verify,
-			ViaHome: config.Get().Network.ViaHome,
+			SSID:     wifi.Get().Network(),
+			Address:  address(),
+			MAC:      wifi.Get().MAC(),
+			Verify:   config.Get().Network.Verify,
+			ViaHome:  config.Get().Network.ViaHome,
+			Internet: network.Get().Internet(),
 		}
 		if l := dhcp.Get().Lease(); l != nil {
 			c.Router = l.Router.String()
 			c.Renew = l.Renew
 		}
 		return c
-	}, network.Get().SetVerify, network.Get().SetViaHome,
+	}, network.Get().SetVerify, network.Get().SetViaHome, network.Get().SetInternet,
 		sharedsettings.NewWifiPages(network.Get().Wifi(), shell.Get()), &sharedsettings.WebAccess{
 			Admin:       frontend.Get(),
 			Certificate: certs.Get(),
