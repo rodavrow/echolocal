@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/ygelfand/libcountertop/pkg/runtime/crash"
 	"github.com/ygelfand/libcountertop/pkg/runtime/oom"
@@ -25,6 +26,10 @@ import (
 	"github.com/ygelfand/echolocal/internal/parts"
 	"github.com/ygelfand/echolocal/internal/update"
 )
+
+// stopWithin bounds a stop or restart: a service still running after it is named in the log and
+// left behind, so one stuck service cannot keep echod from restarting.
+const stopWithin = 15 * time.Second
 
 func Run(ctx context.Context) error {
 	b := board.Detect()
@@ -68,6 +73,7 @@ func Run(ctx context.Context) error {
 	slog.Info("state restored")
 
 	group := service.New()
+	group.StopWithin(stopWithin)
 	component.Default().AddTo(group)
 
 	slog.Info("resident")
