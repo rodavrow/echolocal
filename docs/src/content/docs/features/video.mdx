@@ -1,13 +1,12 @@
 ---
-title: Local video
-description: Play a video from a server on your own network, full screen, from Home Assistant.
+title: Video
+description: Play a video from a URL, full screen, from Home Assistant, even with Internet access set to Local only.
 ---
 
 On the Echo Shows.
 
-Home Assistant can play a video file from a server on your local network, full screen with sound.
-It doesn't use casting or the internet, so it also works on a Show with **Internet access** set to
-**Local only**.
+Home Assistant can play a video file from a URL, full screen with sound. It doesn't use casting, so
+a video from a server on your own network also plays with **Internet access** set to **Local only**.
 
 ## Playing a video
 
@@ -23,7 +22,7 @@ data:
 
 | Field | |
 |---|---|
-| `url` | Required. An `http` or `https` URL on your local network |
+| `url` | Required. An `http` or `https` URL. See [Which URLs play](#which-urls-play) |
 | `title` | Optional. Shown with the player controls |
 | `start` | Optional. Where to start, in seconds |
 
@@ -50,30 +49,44 @@ player or Bluetooth stops the video.
 | **Video state** | `idle`, `loading`, `playing`, `paused` or `error` |
 | **Video position** | Seconds into the video, updated about every 5 seconds while it plays |
 
-`error` means the video wouldn't open or stopped partway, for example because the server
-returned an error or the file isn't a format the Show plays. The device log has the reason.
+`error` means the video wouldn't open, stopped partway, or was blocked by **Local only**. For
+example, the server returned an error or the file isn't a format the Show plays. The device log has
+the reason.
 
-## Local network only
+## Which URLs play
 
-The device refuses any URL whose host isn't on your local network:
+That depends on the device's **Internet access** setting:
+
+| Internet access | URLs that play |
+|---|---|
+| **Open** (the default) | Any `http` or `https` URL |
+| **Quiet** | Any `http` or `https` URL. Quiet only stops background lookups no feature needs, and a video you asked for is a needed request |
+| **Local only** | Private, loopback and link-local addresses only |
+
+Under **Local only**, the local addresses are:
 
 - private addresses (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `fc00::/7`)
 - loopback addresses
 - link-local addresses (`169.254.0.0/16`, `fe80::/10`)
 
-A host name must resolve only to such addresses. Every redirect is checked the same way, and the
-device won't connect anywhere else even if a name changes its answer, so the rule doesn't depend on
-your firewall. A refused URL fails the action with an error that says so. No proxy is used.
+A host name must resolve only to such addresses. Every redirect, request and connection is checked
+the same way, so the rule doesn't depend on your firewall. A refused URL fails the action with
+`blocked: Internet access is Local only`. No proxy is used.
+
+The setting is read at every check, not when the video starts. Switching to **Local only** while a
+video from outside plays stops it within about a second, or at its next request, with **Video state**
+`error`. A live stream stops at its next segment.
 
 ## Preparing videos
 
-The Show plays files over plain HTTP, and the server must support `Range` requests so the video can
-seek. The most reliable format is an MP4 with H.264 video up to 720p and AAC audio, with its index at
-the front:
+The Show plays files over HTTP, and the server must support `Range` requests so the video can seek.
+The most reliable format is an MP4 with H.264 video up to 720p and AAC audio, with its index at the
+front:
 
 ```sh
 ffmpeg -i in.mkv -c:v libx264 -profile:v main -vf scale=-2:720 -c:a aac -movflags +faststart out.mp4
 ```
 
-WebM and MKV files, HEVC and VP9 video, and Opus, MP3, Vorbis or FLAC audio also play. For a quick
-test, `python3 -m http.server 8099` in the folder with the file serves it with `Range` support.
+WebM and MKV files, HLS streams, HEVC and VP9 video, and Opus, MP3, Vorbis or FLAC audio also play.
+For a quick test, `python3 -m http.server 8099` in the folder with the file serves it with `Range`
+support.
