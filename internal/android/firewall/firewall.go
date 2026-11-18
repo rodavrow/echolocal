@@ -88,6 +88,9 @@ func Ensure() error {
 			return err
 		}
 	}
+	if localOnly {
+		return keepLocal(true)
+	}
 	return nil
 }
 
@@ -108,11 +111,13 @@ func ensure(chain string) error {
 // iptables 1.4.20 takes -w without a timeout and then waits forever.
 const lockWait = 5 * time.Second
 
-func has(rule []string) (bool, error) {
+func has(rule []string) (bool, error) { return hasIn(iptables, rule) }
+
+func hasIn(tables string, rule []string) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), lockWait)
 	defer cancel()
 
-	err := exec.CommandContext(ctx, iptables, append([]string{"-w", "-C"}, rule...)...).Run()
+	err := exec.CommandContext(ctx, tables, append([]string{"-w", "-C"}, rule...)...).Run()
 	if err == nil {
 		return true, nil
 	}
@@ -133,11 +138,13 @@ var (
 	errNoChain = errors.New("no such chain")
 )
 
-func iptablesRun(args ...string) error {
+func iptablesRun(args ...string) error { return run(iptables, args...) }
+
+func run(tables string, args ...string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), lockWait)
 	defer cancel()
 
-	out, err := exec.CommandContext(ctx, iptables, append([]string{"-w"}, args...)...).
+	out, err := exec.CommandContext(ctx, tables, append([]string{"-w"}, args...)...).
 		CombinedOutput()
 	if err == nil {
 		return nil
@@ -149,5 +156,5 @@ func iptablesRun(args ...string) error {
 	case strings.Contains(said, "No chain/target/match by that name"):
 		return errNoChain
 	}
-	return fmt.Errorf("firewall: iptables %s: %w: %s", strings.Join(args, " "), err, out)
+	return fmt.Errorf("firewall: %s %s: %w: %s", tables, strings.Join(args, " "), err, out)
 }
