@@ -97,6 +97,7 @@ func build() *castreceiver.Receiver {
 			Apps:        apps(),
 			Notice:      notice(),
 			Preferences: preferences(),
+			Cloud:       func() bool { return !quiet() },
 		},
 	})
 	configureSettings(r)
