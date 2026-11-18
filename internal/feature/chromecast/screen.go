@@ -15,6 +15,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/media/playback"
 	sharedcomponent "github.com/ygelfand/libcountertop/pkg/runtime/component"
 	"github.com/ygelfand/libcountertop/pkg/runtime/control/castcmd"
+	"github.com/ygelfand/libcountertop/pkg/settings/schema"
 
 	"github.com/ygelfand/echolocal/internal/android/dns"
 	"github.com/ygelfand/echolocal/internal/board"
@@ -22,6 +23,7 @@ import (
 	"github.com/ygelfand/echolocal/internal/config"
 	"github.com/ygelfand/echolocal/internal/feature/dhcp"
 	"github.com/ygelfand/echolocal/internal/feature/message"
+	networkpolicy "github.com/ygelfand/echolocal/internal/feature/network"
 	"github.com/ygelfand/echolocal/internal/hardware/display"
 	"github.com/ygelfand/echolocal/internal/layout"
 	"github.com/ygelfand/echolocal/internal/ui"
@@ -60,7 +62,7 @@ var tuning = sync.OnceValue(func() *engine.Tuning {
 func Tuning() *engine.Tuning { return tuning() }
 
 var host = sync.OnceValue(func() *engine.Host {
-	return engine.NewHost(engine.HostOptions{
+	h := engine.NewHost(engine.HostOptions{
 		Dir:         layout.CastEngineDir,
 		State:       layout.CastEngineState,
 		Args:        webreceiver.EngineArgs(),
@@ -71,7 +73,11 @@ var host = sync.OnceValue(func() *engine.Host {
 			return t.Width, t.Height
 		},
 		Tuning: Tuning(),
+		Quiet:  quiet,
 	})
+	follow := restartOnChange(quiet(), h.Restart)
+	networkpolicy.Get().Changed.Listen(func(n schema.Network) { follow(n.Internet.Quiet()) })
+	return h
 })
 
 func Engine() *engine.Host { return host() }
