@@ -30,35 +30,42 @@ const (
 )
 
 type paired struct {
-	mics, ref    *alsa.Capture
+	in           *reader
 	micRS, refRS *resample.Rational
 
-	micRaw, refRaw []byte
 	micIn, refIn   []int16
 	micOut, refOut []int16
 }
 
+const (
+	refPeriodBytes = inputPeriod * refChannels * 2
+	micPeriodBytes = inputPeriod * micChannels * 4
+)
+
 func openCapture() (stream, error) {
 	setupConverter()
 
-	p := &paired{
-		micRS:  resample.NewRational(inputRate, Rate, micChannels),
-		refRS:  resample.NewRational(inputRate, Rate, refChannels),
-		micRaw: make([]byte, inputPeriod*micChannels*4),
-		refRaw: make([]byte, inputPeriod*refChannels*2),
-		micIn:  make([]int16, inputPeriod*micChannels),
-		refIn:  make([]int16, inputPeriod*refChannels),
-	}
-	p.micRS.Headroom(float32(math.Pow(10, micBoostDB/20)))
-
-	if err := p.start(); err != nil {
+	in, err := newReader(openPair, refPeriodBytes, micPeriodBytes)
+	if err != nil {
 		return nil, err
 	}
-	return p, nil
+	return newPaired(in), nil
 }
 
-func (p *paired) start() error {
-	ref, err := alsa.Open(Card, refDevice, alsa.Config{
+func newPaired(in *reader) *paired {
+	p := &paired{
+		in:    in,
+		micRS: resample.NewRational(inputRate, Rate, micChannels),
+		refRS: resample.NewRational(inputRate, Rate, refChannels),
+		micIn: make([]int16, inputPeriod*micChannels),
+		refIn: make([]int16, inputPeriod*refChannels),
+	}
+	p.micRS.Headroom(float32(math.Pow(10, micBoostDB/20)))
+	return p
+}
+
+func openPair() (ref, mics pcmDevice, err error) {
+	r, err := alsa.Open(Card, refDevice, alsa.Config{
 		Channels:   refChannels,
 		Rate:       inputRate,
 		Format:     alsa.FormatS16LE,
@@ -67,10 +74,10 @@ func (p *paired) start() error {
 		Periods:    refPeriods,
 	})
 	if err != nil {
-		return fmt.Errorf("reference: %w", err)
+		return nil, nil, fmt.Errorf("reference: %w", err)
 	}
 
-	mics, err := alsa.Open(Card, micDevice, alsa.Config{
+	m, err := alsa.Open(Card, micDevice, alsa.Config{
 		Channels:   micChannels,
 		Rate:       inputRate,
 		Format:     alsa.FormatS32LE,
@@ -79,20 +86,17 @@ func (p *paired) start() error {
 		Periods:    micPeriods,
 	})
 	if err != nil {
-		_ = ref.Close()
-		return fmt.Errorf("microphones: %w", err)
+		_ = r.Close()
+		return nil, nil, fmt.Errorf("microphones: %w", err)
 	}
-
-	p.ref, p.mics = ref, mics
-	return nil
+	return r, m, nil
 }
 
-func (p *paired) restart() error {
-	p.stop()
+// What was resampled before an overrun does not join up with what follows it.
+func (p *paired) reset() {
 	p.micRS.Reset()
 	p.refRS.Reset()
 	p.micOut, p.refOut = p.micOut[:0], p.refOut[:0]
-	return p.start()
 }
 
 func (p *paired) Read(buf []byte) (int, error) {
@@ -121,19 +125,25 @@ func (p *paired) Read(buf []byte) (int, error) {
 }
 
 func (p *paired) fill() error {
-	if err := p.read(p.ref, p.refRaw); err != nil {
+	got, err := p.in.next()
+	if err != nil {
 		return err
 	}
-	if err := p.read(p.mics, p.micRaw); err != nil {
-		return err
+	defer p.in.release(got)
+
+	if got.err != nil {
+		if errors.Is(got.err, alsa.ErrOverrun) {
+			p.reset()
+		}
+		return got.err
 	}
 
 	for i := range p.refIn {
-		p.refIn[i] = int16(binary.LittleEndian.Uint16(p.refRaw[2*i:]))
+		p.refIn[i] = int16(binary.LittleEndian.Uint16(got.ref[2*i:]))
 	}
 	// Measured on athena: 24-bit samples in the low bits of each 32-bit slot.
 	for i := range p.micIn {
-		p.micIn[i] = int16(int32(binary.LittleEndian.Uint32(p.micRaw[4*i:])) >> 8)
+		p.micIn[i] = int16(int32(binary.LittleEndian.Uint32(got.mics[4*i:])) >> 8)
 	}
 
 	p.micOut = append(p.micOut, p.micRS.Run(p.micIn)...)
@@ -141,35 +151,8 @@ func (p *paired) fill() error {
 	return nil
 }
 
-func (p *paired) read(pcm *alsa.Capture, buf []byte) error {
-	for got := 0; got < len(buf); {
-		n, err := pcm.Read(buf[got:])
-		if errors.Is(err, alsa.ErrOverrun) {
-			if rerr := p.restart(); rerr != nil {
-				return fmt.Errorf("mic: restarting the paired capture: %w", rerr)
-			}
-			return alsa.ErrOverrun
-		}
-		if err != nil {
-			return err
-		}
-		got += n
-	}
-	return nil
-}
-
-func (p *paired) stop() {
-	if p.ref != nil {
-		_ = p.ref.Close()
-	}
-	if p.mics != nil {
-		_ = p.mics.Close()
-	}
-	p.ref, p.mics = nil, nil
-}
-
 func (p *paired) Close() error {
-	p.stop()
+	p.in.Close()
 	return nil
 }
 
