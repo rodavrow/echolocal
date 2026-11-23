@@ -248,6 +248,8 @@ github.com/pion/webrtc/v4 v4.2.22/go.mod h1:JBu1ba8lUEX4jbYFKofglMQJG7f0rJk7UepK
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
+github.com/rodavrow/libcountertop v0.0.0-20261123172334-38fb66c0ca37 h1:4lubxB67vylbmHzV1aRJBBYgFC9tazZhSVOTm8qu17s=
+github.com/rodavrow/libcountertop v0.0.0-20261123172334-38fb66c0ca37/go.mod h1:G2LFuK4ZPFQW8+gqhw/BNgjCj1r/wmPRGhD4Hgc+Sis=
 github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
@@ -304,8 +306,6 @@ github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e h1:JVG44RsyaB9T2KIHavM
 github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e/go.mod h1:RbqR21r5mrJuqunuUZ/Dhy/avygyECGrLceyNeo4LiM=
 github.com/ygelfand/go-esphome-device v0.0.21 h1:CRwZEkndhxRhUvFCqc5yyb3/kPpGJ68YGpGV2nrbQDM=
 github.com/ygelfand/go-esphome-device v0.0.21/go.mod h1:wCDvFZ4VYe1sq+pOQz7NhbELA1HwvcNrCxdle+hjZcs=
-github.com/ygelfand/libcountertop v0.1.1-0.20261122164943-ad1602e31145 h1:vN4QRDR6XMcTrOd2YJ6sLtelkPun/afJ1T13BcoJS/0=
-github.com/ygelfand/libcountertop v0.1.1-0.20261122164943-ad1602e31145/go.mod h1:G2LFuK4ZPFQW8+gqhw/BNgjCj1r/wmPRGhD4Hgc+Sis=
 github.com/ygelfand/reolinkproxy v0.0.0-20261026000641-3a2fddcfed4f h1:am3mVXsua7qzoNwvd1UYBZf7EIx8ZkhPeCLw1DqlAiY=
 github.com/ygelfand/reolinkproxy v0.0.0-20261026000641-3a2fddcfed4f/go.mod h1:jvxG4yqkSOqNZ2CjC6cbD8uM0upQmt9yntM+2lu5WTY=
 github.com/yuin/goldmark v1.8.5 h1:r6N5afV5qj/5S4UTch8agZHJ8UxNCMwX7WjkkJam2NA=

@@ -136,3 +136,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	rsc.io/qr v0.2.0 // indirect
 )
+
+replace github.com/ygelfand/libcountertop => github.com/rodavrow/libcountertop v0.0.0-20261123172334-38fb66c0ca37
