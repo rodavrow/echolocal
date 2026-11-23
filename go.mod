@@ -10,8 +10,8 @@ require (
 	github.com/go-gui-org/go-gui v0.94.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
-	github.com/ygelfand/go-esphome-device v0.0.20
-	github.com/ygelfand/libcountertop v0.1.1-0.20261121224652-85b7505f45fd
+	github.com/ygelfand/go-esphome-device v0.0.21
+	github.com/ygelfand/libcountertop v0.1.1-0.20261122164943-ad1602e31145
 	github.com/zserge/microwakeword v0.0.0-20260330234603-bfaf3840114e
 )
 
@@ -137,4 +137,4 @@ require (
 	rsc.io/qr v0.2.0 // indirect
 )
 
-replace github.com/ygelfand/libcountertop => github.com/rodavrow/libcountertop v0.0.0-20261122092541-395c5a818b2d
+replace github.com/ygelfand/libcountertop => github.com/rodavrow/libcountertop v0.0.0-20261123063509-3afc4a39c3fd
