@@ -6,6 +6,7 @@ import (
 	_ "github.com/ygelfand/echolocal/internal/feature/activity"
 	_ "github.com/ygelfand/echolocal/internal/feature/airplay"
 	_ "github.com/ygelfand/echolocal/internal/feature/alarm"
+	_ "github.com/ygelfand/echolocal/internal/feature/announcements"
 	_ "github.com/ygelfand/echolocal/internal/feature/api"
 	_ "github.com/ygelfand/echolocal/internal/feature/arbitration"
 	_ "github.com/ygelfand/echolocal/internal/feature/bluetooth"

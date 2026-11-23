@@ -8,6 +8,7 @@ import (
 	sharedha "github.com/ygelfand/libcountertop/pkg/homeassistant"
 
 	"github.com/ygelfand/echolocal/internal/config"
+	"github.com/ygelfand/echolocal/internal/feature/announcements"
 	"github.com/ygelfand/echolocal/internal/feature/arbitration"
 	"github.com/ygelfand/echolocal/internal/feature/detect"
 	"github.com/ygelfand/echolocal/internal/feature/homeassistant"
@@ -46,6 +47,8 @@ func assistantPages() *sharedsettings.AssistantPages {
 			Look:       lookPages(),
 			Shell:      shell.Get(),
 			VoiceMatch: panel.Get().Page,
+
+			Announcements: announcements.Get(),
 		},
 	)
 }
