@@ -58,6 +58,7 @@ func build() *Voice {
 	slog.Info("wake words", "ours", len(ours), "slots", slots)
 
 	wakeword.Requested.Listen(v.Start)
+	media.Announcing.Listen(v.Turn().Spoken)
 
 	buttons.Get().Events.Listen(func(e buttons.Event) {
 		if e.Name != buttons.Action {

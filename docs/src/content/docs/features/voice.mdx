@@ -138,6 +138,40 @@ Turn on **Recognized voices only** on an assistant's page on an Echo Show, or
 - Follow-up questions after a reply, **Talk now**, the action button
   and the **Wake** button skip the check.
 
+## Announcements from Home Assistant
+
+Home Assistant can make the device speak without a wake word: `assist_satellite.announce`,
+`assist_satellite.start_conversation`, or a text-to-speech announcement on the media player
+(`tts.speak` or `media_player.play_media` with `announce: true`). The device shows it like a
+reply: the assistant's Responding visual with the text on an Echo Show, the **Replying effect**
+on an Echo Dot's ring. It starts with the speech, not with the chime before it, and ends with it.
+
+- An announcement that arrives during a conversation waits for the conversation to end.
+- A wake word interrupts an announcement, and **"stop"** ends it.
+- A media player announcement shows no text. Only speech is shown: a chime or a sound effect
+  played with `announce: true` is not.
+- `start_conversation` listens as the first assistant afterwards.
+
+The first assistant's look is used. To have another one speak, set **Next announcement
+assistant** just before the announcement. It counts for one announcement and then goes back to
+`Default`; if no announcement comes, it goes back after 30 seconds.
+
+```yaml
+- action: select.select_option
+  target:
+    entity_id: select.<device>_next_announcement_assistant
+  data:
+    option: Assistant 2
+- action: assist_satellite.announce
+  target:
+    entity_id: assist_satellite.<device>_assist_satellite
+  data:
+    message: Dinner is ready
+```
+
+Turn **Animate announcements** off, under **Settings → Voice assistants** or with
+`switch.<device>_animate_announcements`, and announcements only play, as they did before.
+
 ## Stop
 
 Say **"stop"**, no wake word needed, tap the screen on an Echo Show, or tap the action button on an Echo Dot. It stops, in order: a ringing alarm or timer, the assistant, an announcement, then pauses music.

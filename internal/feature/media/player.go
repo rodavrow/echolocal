@@ -35,6 +35,9 @@ const VolumeSteps = speaker.VolumeSteps
 
 const volumeFlash = 2 * time.Second
 
+// Announcing tells when an announcement that is speech starts and ends on the media player.
+var Announcing hook.Hook[bool]
+
 type Player struct {
 	*mediaplayer.Player[*speaker.Player]
 
@@ -129,6 +132,8 @@ func build() *Player {
 		Volume:   mediaVolume{p},
 		Changed:  p.refresh,
 		Device:   component.DevicePlayback,
+
+		Announcing: Announcing.Emit,
 	})
 	p.layers = noiselayer.New(p.Stream(), component.DevicePlayback)
 	component.Bind(p.resampling, speaker.Resamplings(), speaker.Get().SetResampling,
