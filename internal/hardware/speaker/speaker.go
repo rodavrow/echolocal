@@ -87,7 +87,8 @@ type Player struct {
 
 	underruns atomic.Uint64
 
-	deaf atomic.Uint64
+	deaf       atomic.Uint64
+	unplayable atomic.Uint64
 
 	bus mix.Bus
 	sum []float32
@@ -590,6 +591,12 @@ func (l Lane) Play(samples []int16)         { l.p.PlayStream(l.s, samples) }
 func (l Lane) Take() []int16                { return l.p.bus.Take(l.s) }
 func (l Lane) Adjust(rewrite func([]int16)) { l.p.bus.Adjust(l.s, rewrite) }
 func (l Lane) Queued() int                  { return l.p.bus.StreamLen(l.s) / Channels }
+
+// QueuedFor is how long audio queued now waits before it sounds: the lane's queue plus what the
+// playback device still holds. Lanes mix side by side, so another lane's queue does not delay it.
+func (l Lane) QueuedFor() time.Duration {
+	return time.Duration(l.Queued())*time.Second/Rate + l.p.Latency()
+}
 func (l Lane) Drain()                       { l.p.bus.ClearStream(l.s) }
 func (l Lane) Speed(times int)              { l.p.bus.SetSpeed(l.s, times, Channels) }
 
@@ -603,6 +610,42 @@ func (p *Player) PlayVoice(mono []int16) {
 	p.voiceMu.Unlock()
 
 	p.PlayStream(config.StreamVoice, out)
+}
+
+// PlayVoiceAt queues speech that comes at another rate or channel count, such as an avatar's
+// 48 kHz stereo, on the voice lane without narrowing it to 16 kHz first. A format the speaker
+// cannot take as it is is dropped and counted in the log.
+func (p *Player) PlayVoiceAt(rate, channels int, pcm []int16) {
+	if rate == VoiceRate && channels == 1 {
+		p.PlayVoice(pcm)
+		return
+	}
+	out, err := asOutput(rate, channels, pcm)
+	if err != nil {
+		if n := p.unplayable.Add(1); n == 1 || n%100 == 0 {
+			slog.Error("voice dropped", "err", err, "times", n)
+		}
+		return
+	}
+	p.PlayStream(config.StreamVoice, out)
+}
+
+// asOutput gives pcm in the speaker's own format, for audio already at its rate.
+func asOutput(rate, channels int, pcm []int16) ([]int16, error) {
+	if rate != Rate {
+		return nil, fmt.Errorf("speaker: voice at %d Hz, want %d", rate, Rate)
+	}
+	switch channels {
+	case Channels:
+		return pcm, nil
+	case 1:
+		out := make([]int16, 0, len(pcm)*Channels)
+		for _, s := range pcm {
+			out = append(out, s, s)
+		}
+		return out, nil
+	}
+	return nil, fmt.Errorf("speaker: voice in %d channels, want 1 or %d", channels, Channels)
 }
 
 func (p *Player) Drain() {

@@ -172,6 +172,45 @@ assistant** just before the announcement. It counts for one announcement and the
 Turn **Animate announcements** off, under **Settings → Voice assistants** or with
 `switch.<device>_animate_announcements`, and announcements only play, as they did before.
 
+## Avatar mode
+
+On an Echo Show, an assistant can be shown and voiced by a
+[LiveTalking](https://github.com/lipku/LiveTalking) avatar on your network. In avatar mode the
+avatar's video takes the place of the assistant's look, in the panel or across the screen, and
+the avatar speaks the reply with its lips in time. The voice still comes out of the Show's
+speaker, so **"stop"** and the wake word interrupt it as usual. Captions are unchanged. The Echo
+Dot has no avatar mode.
+
+Avatar mode is set from Home Assistant, normally by the Voice Assistant Manager integration,
+with these entities on the assistant's sub-device. `N` is 1 or 2.
+
+| Entity | What it does |
+|---|---|
+| `switch.<device>_assistant_N_avatar_mode` | Avatar mode on or off |
+| `text.<device>_assistant_N_avatar_url` | The LiveTalking address, `http://host:port`, optionally with a path, with no slash at the end |
+| `text.<device>_assistant_N_avatar_id` | Which avatar to use; empty uses the server's default |
+| `select.<device>_assistant_N_avatar_connection` | **Connect when woken** (default) or **Always connected** |
+| `sensor.<device>_assistant_N_avatar_session` | The Show's current LiveTalking session (diagnostic) |
+| `sensor.<device>_assistant_N_avatar_state` | `off`, `connecting`, `connected` or `failed` (diagnostic) |
+
+- **Connect when woken** opens the avatar when the wake word is heard, while you are still
+  talking, and closes it about ten seconds after the reply. It also opens as soon as **Next
+  announcement assistant** names the assistant. **Always connected** keeps it open, so the
+  avatar is there at once.
+- An assistant in avatar mode takes the whole reply before it speaks, even when its reply
+  delivery is set to stream, because LiveTalking speaks a file.
+- The usual look shows until the avatar's picture is up, while a call, a camera, the doorbell
+  or a video (cast, AirPlay, YouTube or your own) is on the screen, and for the rest of a turn
+  if the avatar's picture stalls. The photo screen, music and other apps do not hide the avatar.
+- If the avatar is not connected, does not take the reply, or makes no sound within a few
+  seconds, the Show speaks the reply itself. A reply is never lost to the avatar.
+- Announcements go through the avatar only while **Animate announcements** is on, and the chime
+  before an announcement plays on the Show. A media player announcement (`tts.speak` or
+  `announce: true`) always plays on the Show with the usual look.
+- The Show reaches LiveTalking directly: it needs TCP to the server's port (8010 by default)
+  and UDP both ways for the video. If the Show is on another network or VLAN, allow both, or
+  **Avatar state** goes from `connecting` to `failed`.
+
 ## Stop
 
 Say **"stop"**, no wake word needed, tap the screen on an Echo Show, or tap the action button on an Echo Dot. It stops, in order: a ringing alarm or timer, the assistant, an announcement, then pauses music.
