@@ -69,6 +69,11 @@ Each assistant has its own set, on its own sub-device. `N` is 1 or 2.
 | `number.<device>_assistant_N_recordings_kept` | Recordings kept | Keep the last N requests' audio, for the `recordings` action and the card's Activity tab | 0–10 | 0 |
 | `switch.<device>_assistant_N_recognized_voices_only` | Recognized voices only | Answer only voices [voice match](/features/voice/#voice-match) recognizes | On, Off | Off |
 | `switch.<device>_assistant_N_wake_the_screen` | Wake the screen | Close the screen saver and end night mode when this assistant starts. Echo Shows only | On, Off | Off |
+| `switch.<device>_assistant_N_avatar_mode` | Avatar mode | Show and voice this assistant with its LiveTalking avatar ([Avatar mode](/features/voice/#avatar-mode)). Echo Shows only | On, Off | Off |
+| `text.<device>_assistant_N_avatar_url` | Avatar URL | The LiveTalking address. Echo Shows only | `http(s)://host[:port][/path]` | |
+| `text.<device>_assistant_N_avatar_id` | Avatar ID | Which avatar; empty is the server's default. Echo Shows only | Letters, digits, `_`, `-` | |
+| `select.<device>_assistant_N_avatar_connection` | Avatar connection | When the avatar's session is open. Echo Shows only | Always connected, Connect when woken | Connect when woken |
+| `sensor.<device>_assistant_N_avatar_session`, `sensor.<device>_assistant_N_avatar_state` | Avatar session, Avatar state | The LiveTalking session and how it is doing (diagnostic). Echo Shows only | | |
 
 The wake word and the Assist pipeline are picked with Home Assistant's own selects on the same
 device.
