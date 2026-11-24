@@ -248,8 +248,8 @@ github.com/pion/webrtc/v4 v4.2.22/go.mod h1:JBu1ba8lUEX4jbYFKofglMQJG7f0rJk7UepK
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
-github.com/rodavrow/libcountertop v0.0.0-20261124174701-f60b2de48226 h1:eiz1sdrHC6A/NOuhdpCDXq5330ZTRidWSONNQu7E0Kg=
-github.com/rodavrow/libcountertop v0.0.0-20261124174701-f60b2de48226/go.mod h1:G2LFuK4ZPFQW8+gqhw/BNgjCj1r/wmPRGhD4Hgc+Sis=
+github.com/rodavrow/libcountertop v0.0.0-20261124183046-9a0048ae1e1c h1:6rhjWY2zUNyb2UjBzim5klTstv3mvZ9d7Z0f68ux5q4=
+github.com/rodavrow/libcountertop v0.0.0-20261124183046-9a0048ae1e1c/go.mod h1:G2LFuK4ZPFQW8+gqhw/BNgjCj1r/wmPRGhD4Hgc+Sis=
 github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
