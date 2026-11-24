@@ -41,6 +41,9 @@ var get = sync.OnceValue(func() *API {
 		Adoption:     adoption{},
 		Logs:         logging.Log.Stream,
 		OnSubscribed: func() { component.Subscribed.Emit(struct{}{}) },
+		// Re-registering drops Home Assistant's connection, which would end a turn or an
+		// announcement, so it waits for them.
+		Busy: func() bool { return voice.Get().Turn().Engaged() },
 	})
 	component.Reconnect.Listen(func(struct{}) { s.Reconnect() })
 	component.Fire.Listen(s.Fire)
