@@ -60,8 +60,28 @@ func TestEachAssistantHasItsAvatarEntitiesOnItsOwnDevice(t *testing.T) {
 			t.Errorf("assistant %d has %v, want %v", slot+1, on, names)
 		}
 	}
-	if len(got) != wakeword.Slots {
-		t.Errorf("avatar entities on %d devices, want %d", len(got), wakeword.Slots)
+	if len(got) != wakeword.Slots+1 {
+		t.Errorf("avatar entities on %d devices, want %d", len(got), wakeword.Slots+1)
+	}
+}
+
+// Voice Assistant Manager finds the switch by this name on the device that carries the
+// satellite, which is the main one.
+func TestTheShowItselfHasTheAvatarHoldSwitch(t *testing.T) {
+	a := &Avatar{sharedavatar.New(sharedavatar.Options{
+		Slots:    wakeword.Slots,
+		DeviceID: component.AssistantDevice,
+	})}
+
+	var onShow []string
+	for _, e := range a.Entities() {
+		if b := base(t, e); b.DeviceID == 0 {
+			onShow = append(onShow, b.Name)
+		}
+	}
+
+	if !slices.Equal(onShow, []string{"Avatar hold"}) {
+		t.Errorf("the Show itself has %v, want only Avatar hold", onShow)
 	}
 }
 

@@ -83,6 +83,7 @@ device.
 | `number.<device>_microphone_stop_word_sensitivity` | Stop word sensitivity | How sure "Stop" has to be. 1 turns it off | 0.5–1 | 0.7 |
 | `switch.<device>_animate_announcements` | Animate announcements | Show speech Home Assistant pushes as a reply ([Announcements](/features/voice/#announcements-from-home-assistant)) | On, Off | On |
 | `select.<device>_next_announcement_assistant` | Next announcement assistant | The assistant that speaks the next announcement. Goes back to Default after one announcement, or after 30 seconds | Default, Assistant 1, Assistant 2 | Default |
+| `switch.<device>_avatar_hold` | Avatar hold | Keep the avatar that last spoke on screen between announcements ([Avatar mode](/features/voice/#avatar-mode)). Turns itself off a minute after the last announcement. Echo Shows only | On, Off | Off, at every start |
 | `sensor.<device>_last_wake_word`, `sensor.<device>_last_heard`, `sensor.<device>_last_reply` | | The last wake word, what was heard, and the reply (sensors) | | |
 | `sensor.<device>_last_speaker`, `sensor.<device>_last_speaker_score` | Last speaker, Last speaker score | Who said the last wake word, or Unknown, and how close the match was (sensors) | | |
 | `sensor.<device>_timers` | Timers | Running timers (sensor) | | |

@@ -23,6 +23,7 @@ import (
 	"github.com/ygelfand/echolocal/internal/config"
 	"github.com/ygelfand/echolocal/internal/feature/a2dp"
 	"github.com/ygelfand/echolocal/internal/feature/assistant"
+	"github.com/ygelfand/echolocal/internal/feature/avatar"
 	"github.com/ygelfand/echolocal/internal/feature/cameras"
 	"github.com/ygelfand/echolocal/internal/feature/chromecast"
 	"github.com/ygelfand/echolocal/internal/feature/dashboard"
@@ -156,6 +157,7 @@ var Get = sync.OnceValue(func() *screens.App {
 			screens.On(&firmware.Get().Listed),
 			screens.On(&privacy.Get().Changed),
 			screens.On(&web.Get().Offered),
+			screens.On(&avatar.Get().HeldChanged),
 		},
 	}
 	var app *screens.App

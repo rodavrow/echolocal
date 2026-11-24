@@ -193,13 +193,21 @@ with these entities on the assistant's sub-device. `N` is 1 or 2.
 | `sensor.<device>_assistant_N_avatar_session` | The Show's current LiveTalking session (diagnostic) |
 | `sensor.<device>_assistant_N_avatar_state` | `off`, `connecting`, `connected` or `failed` (diagnostic) |
 
+On the Show itself, `switch.<device>_avatar_hold` keeps the avatar that last spoke on screen
+between announcements, idle and without captions, instead of going back to the screen before.
+The Voice Assistant Manager turns it on for a chat between assistants. A touch, a call, camera
+or video, or the avatar disconnecting lets the avatar go, and the next announcement is held
+again. The switch is off at every start and turns itself off a minute after the last
+announcement.
+
 - **Connect when woken** opens the avatar when the wake word is heard, while you are still
   talking, and closes it about ten seconds after the reply. It also opens as soon as **Next
   announcement assistant** names the assistant. **Always connected** keeps it open, so the
   avatar is there at once.
 - An assistant in avatar mode takes the whole reply before it speaks, even when its reply
   delivery is set to stream, because LiveTalking speaks a file.
-- The usual look shows until the avatar's picture is up, while a call, a camera, the doorbell
+- While the avatar's picture is coming up, for up to a second, the Show shows the captions
+  only. The usual look shows if the picture takes longer, while a call, a camera, the doorbell
   or a video (cast, AirPlay, YouTube or your own) is on the screen, and for the rest of a turn
   if the avatar's picture stalls. The photo screen, music and other apps do not hide the avatar.
 - If the avatar is not connected, does not take the reply, or makes no sound within a few
