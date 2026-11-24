@@ -2,6 +2,7 @@ package voice
 
 import (
 	"context"
+	"time"
 
 	"github.com/ygelfand/libcountertop/pkg/assistant/turn"
 	"github.com/ygelfand/libcountertop/pkg/audio/sound"
@@ -12,6 +13,7 @@ import (
 	"github.com/ygelfand/echolocal/internal/feature/activity"
 	"github.com/ygelfand/echolocal/internal/feature/announcements"
 	"github.com/ygelfand/echolocal/internal/feature/arbitration"
+	"github.com/ygelfand/echolocal/internal/feature/avatar"
 	"github.com/ygelfand/echolocal/internal/feature/feedback"
 	"github.com/ygelfand/echolocal/internal/feature/media"
 	"github.com/ygelfand/echolocal/internal/feature/mute"
@@ -22,6 +24,16 @@ import (
 	"github.com/ygelfand/echolocal/internal/hardware/speaker"
 	"github.com/ygelfand/echolocal/internal/lib/wake"
 )
+
+// voiceSpeaker is the speaker as a conversation's voice lane; an avatar plays its stream into it.
+type voiceSpeaker struct{ *speaker.Player }
+
+// Drain drops only the voice, so a wake chime or music queued beside it survive an avatar's
+// reply being cut short.
+func (s voiceSpeaker) Drain() { s.Lane(config.StreamVoice).Drain() }
+
+// QueuedFor is how long voice queued now waits before it sounds; Queued counts the whole bus.
+func (s voiceSpeaker) QueuedFor() time.Duration { return s.Lane(config.StreamVoice).QueuedFor() }
 
 type voiceSound struct{ *speaker.Driver }
 
@@ -36,7 +48,7 @@ func (s voiceSound) Duck(on bool) { s.Backgrounds().Duck(on) }
 func dependencies() turn.Dependencies {
 	return turn.Dependencies{
 		Source:       mic.Get(),
-		Speaker:      speaker.Get(),
+		Speaker:      voiceSpeaker{speaker.Get()},
 		Sound:        voiceSound{speaker.Sound()},
 		Player:       media.Get(),
 		Log:          activity.Get(),
@@ -59,6 +71,7 @@ func dependencies() turn.Dependencies {
 		Arbiter:       arbitration.Get(),
 		Voices:        voicematch.Get(),
 		Announcements: announcements.Get(),
+		Avatar:        avatar.Turn(),
 	}
 }
 

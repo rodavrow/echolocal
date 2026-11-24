@@ -28,6 +28,7 @@ var screenOnly = []string{
 	"github.com/ygelfand/echolocal/internal/feature/poster",
 	"github.com/ygelfand/echolocal/internal/feature/message",
 	"github.com/ygelfand/echolocal/internal/feature/assistant",
+	"github.com/ygelfand/libcountertop/pkg/assistant/avatar",
 	"github.com/ygelfand/echolocal/internal/feature/homecontrol",
 	"github.com/ygelfand/echolocal/internal/feature/a2dp",
 	"github.com/ygelfand/echolocal/internal/feature/drm",
