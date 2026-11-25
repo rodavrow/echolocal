@@ -25,6 +25,7 @@ import (
 	"github.com/ygelfand/echolocal/internal/feature/assistant"
 	"github.com/ygelfand/echolocal/internal/feature/avatar"
 	"github.com/ygelfand/echolocal/internal/feature/cameras"
+	"github.com/ygelfand/echolocal/internal/feature/captions"
 	"github.com/ygelfand/echolocal/internal/feature/chromecast"
 	"github.com/ygelfand/echolocal/internal/feature/dashboard"
 	"github.com/ygelfand/echolocal/internal/feature/doorbell"
@@ -99,6 +100,7 @@ var Get = sync.OnceValue(func() *screens.App {
 		Messages:  message.Get(),
 		Assistant: assistant.Get(),
 		Stage:     assistant.Stage(),
+		Captions:  captions.Get().On,
 		Timers:    timer.Get(),
 		Poster:    poster.Get(),
 		Drawer:    drawer.Get(),
