@@ -137,4 +137,4 @@ require (
 	rsc.io/qr v0.2.0 // indirect
 )
 
-replace github.com/ygelfand/libcountertop => github.com/rodavrow/libcountertop v0.0.0-20261124195759-5adff59beb58
+replace github.com/ygelfand/libcountertop => github.com/rodavrow/libcountertop v0.0.0-20261125071215-1bcd39f6cadb
