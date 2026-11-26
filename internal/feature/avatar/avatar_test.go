@@ -40,7 +40,7 @@ func TestThePhotoScreenLeavesTheAvatarAlone(t *testing.T) {
 // Voice Assistant Manager finds these by display name on the assistant's sub-device.
 var names = []string{
 	"Avatar mode", "Avatar URL", "Avatar ID", "Avatar connection", "Avatar session",
-	"Avatar state",
+	"Avatar state", "Avatar fed by Home Assistant",
 }
 
 func TestEachAssistantHasItsAvatarEntitiesOnItsOwnDevice(t *testing.T) {
