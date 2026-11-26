@@ -51,6 +51,7 @@ func TestSavedKeysKeepTheirLayout(t *testing.T) {
 		"idle",
 		"lock",
 		"lovelace",
+		"mealie",
 		"media",
 		"microphone",
 		"network",
