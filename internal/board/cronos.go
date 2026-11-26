@@ -1,6 +1,10 @@
 package board
 
-import "github.com/ygelfand/echolocal/internal/layout"
+import (
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
+
+	"github.com/ygelfand/echolocal/internal/layout"
+)
 
 // Cronos is the 2nd-generation Echo Show 5.
 var Cronos = Board{
@@ -22,11 +26,12 @@ var Cronos = Board{
 		"video/hevc": "OMX.MTK.VIDEO.DECODER.HEVC.secure",
 	},
 	Keys:    map[uint16]Key{116: Mute},
-	Touch:   "goodix-ts",
+	Touch:   []string{"goodix-ts"},
 	MuteDir: "/sys/devices/platform/gpio-privacy",
 
 	CameraWidth: 1280, CameraHeight: 720,
-	CameraSizes: []string{"1280x960", "1280x720", "864x480", "640x480"},
+	CameraSizes:   []string{"1280x960", "1280x720", "864x480", "640x480"},
+	CameraProfile: h264.Baseline,
 
 	Service:     layout.Binary,
 	ServiceName: layout.Service,

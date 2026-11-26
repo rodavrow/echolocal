@@ -3,6 +3,8 @@ package board
 import (
 	"strings"
 
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
+
 	"github.com/ygelfand/echolocal/internal/lib/asp"
 )
 
@@ -24,6 +26,8 @@ const (
 	MicMutesCamera
 
 	HeadphoneJack
+
+	MFPGatedAmp
 )
 
 type Key string
@@ -65,7 +69,7 @@ type Board struct {
 
 	Keys map[uint16]Key
 
-	Touch string
+	Touch []string
 
 	MuteDir string
 
@@ -92,6 +96,7 @@ type Board struct {
 
 	CameraWidth, CameraHeight int
 	CameraSizes               []string
+	CameraProfile             h264.Profile
 	SubWidth                  int
 
 	Service     string

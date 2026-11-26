@@ -1,6 +1,8 @@
 package board
 
 import (
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
+
 	"github.com/ygelfand/echolocal/internal/layout"
 	"github.com/ygelfand/echolocal/internal/lib/asp"
 )
@@ -34,11 +36,12 @@ var Crown = Board{
 		"video/hevc": "OMX.MTK.VIDEO.DECODER.HEVC.secure",
 	},
 	Keys:    map[uint16]Key{116: Mute},
-	Touch:   "fts_ts",
+	Touch:   []string{"fts_ts"},
 	MuteDir: "/sys/devices/platform/amazon-gating",
 
 	CameraWidth: 1280, CameraHeight: 720,
-	CameraSizes: []string{"1280x720", "960x480", "864x480", "640x480"},
+	CameraSizes:   []string{"1280x720", "960x480", "864x480", "640x480"},
+	CameraProfile: h264.Baseline,
 
 	Service:     layout.Binary,
 	ServiceName: layout.Service,

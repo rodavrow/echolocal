@@ -39,10 +39,10 @@ Requires Home Assistant **2026.8** or newer.
 
 <Steps>
 
-1. In HACS, open **⋮ → Custom repositories**, add `https://github.com/ygelfand/echolocal-hacs` with
+1. In HACS, open **⋮ → Custom repositories**, add `https://github.com/ygelfand/echolocal-ha` with
    the category **Integration**.
 
-   [![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ygelfand&repository=echolocal-hacs&category=Integration)
+   [![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=ygelfand&repository=echolocal-ha&category=Integration)
 
 2. Install **EchoLocal**, then restart Home Assistant.
 
@@ -105,6 +105,13 @@ accepted the action.
 Every turn a device reports: what woke it, what it heard, what it answered, and how long listening,
 thinking and replying took. Where a recording was kept, play back what the microphones sent. How
 many recordings each assistant keeps is in its panel on the card.
+
+### Voices
+
+The household's [voice match](/features/voice/#voice-match) voices. **Add a voice** records one
+through the device you pick under **Speak to**; each voice can be linked to a Home Assistant
+person, recorded again, removed, or given its own **Match threshold**. Changes reach every device.
+Only administrators see this tab.
 
 ### Wake words
 
