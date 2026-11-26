@@ -99,7 +99,7 @@ func (a *Avatar) Run(ctx context.Context) error {
 
 // Entities are the Avatar hold switch on the Show itself, then each assistant's own.
 func (a *Avatar) Entities() []esphome.Entity {
-	out := a.Avatars.DeviceEntities()
+	out := a.DeviceEntities()
 	for slot := range wakeword.Slots {
 		out = append(out, a.Avatars.Entities(slot)...)
 	}

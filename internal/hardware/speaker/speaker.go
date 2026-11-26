@@ -597,8 +597,8 @@ func (l Lane) Queued() int                  { return l.p.bus.StreamLen(l.s) / Ch
 func (l Lane) QueuedFor() time.Duration {
 	return time.Duration(l.Queued())*time.Second/Rate + l.p.Latency()
 }
-func (l Lane) Drain()                       { l.p.bus.ClearStream(l.s) }
-func (l Lane) Speed(times int)              { l.p.bus.SetSpeed(l.s, times, Channels) }
+func (l Lane) Drain()          { l.p.bus.ClearStream(l.s) }
+func (l Lane) Speed(times int) { l.p.bus.SetSpeed(l.s, times, Channels) }
 
 func (p *Player) Adjust(rewrite func([]int16)) { p.bus.Adjust(config.StreamMedia, rewrite) }
 

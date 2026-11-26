@@ -9,8 +9,8 @@ import (
 
 	"github.com/ygelfand/echolocal/internal/config"
 	"github.com/ygelfand/echolocal/internal/feature/announcements"
-	"github.com/ygelfand/echolocal/internal/feature/captions"
 	"github.com/ygelfand/echolocal/internal/feature/arbitration"
+	"github.com/ygelfand/echolocal/internal/feature/captions"
 	"github.com/ygelfand/echolocal/internal/feature/detect"
 	"github.com/ygelfand/echolocal/internal/feature/homeassistant"
 	"github.com/ygelfand/echolocal/internal/feature/shell"
