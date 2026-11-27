@@ -51,7 +51,6 @@ func TestSavedKeysKeepTheirLayout(t *testing.T) {
 		"idle",
 		"lock",
 		"lovelace",
-		"mealie",
 		"media",
 		"microphone",
 		"network",
@@ -73,6 +72,7 @@ func TestSavedKeysKeepTheirLayout(t *testing.T) {
 		"radio",
 		"todo",
 		"tv",
+		"mealie",
 		"voice",
 	}
 	slices.Sort(want)
